@@ -37,7 +37,7 @@ public class Bank {
         if (account != null) {
             return ActionResult.success(account.getAccountData());
         } else {
-            return ActionResult.fail("No account with id: " + id + "\nTry account 1000 or 2000");
+            return ActionResult.fail("No account with id: " + id + "\n");
         }
     }
 

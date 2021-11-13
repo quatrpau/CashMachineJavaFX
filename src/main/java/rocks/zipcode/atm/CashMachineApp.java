@@ -16,18 +16,19 @@ import javafx.scene.layout.FlowPane;
  */
 public class CashMachineApp extends Application {
 
-    private TextField field = new TextField();
+    private TextField idField = new TextField();
+    private TextField depositField = new TextField();
+    private TextField withdrawField = new TextField();
     private CashMachine cashMachine = new CashMachine(new Bank());
-
     private Parent createContent() {
         VBox vbox = new VBox(10);
         vbox.setPrefSize(600, 600);
-
+        //split the string on "\n"
+        //put each thing on a separate line
         TextArea areaInfo = new TextArea();
-
         Button btnSubmit = new Button("Set Account ID");
         btnSubmit.setOnAction(e -> {
-            int id = Integer.parseInt(field.getText());
+            int id = Integer.parseInt(idField.getText());
             cashMachine.login(id);
 
             areaInfo.setText(cashMachine.toString());
@@ -35,7 +36,7 @@ public class CashMachineApp extends Application {
 
         Button btnDeposit = new Button("Deposit");
         btnDeposit.setOnAction(e -> {
-            int amount = Integer.parseInt(field.getText());
+            int amount = Integer.parseInt(depositField.getText());
             cashMachine.deposit(amount);
 
             areaInfo.setText(cashMachine.toString());
@@ -43,7 +44,7 @@ public class CashMachineApp extends Application {
 
         Button btnWithdraw = new Button("Withdraw");
         btnWithdraw.setOnAction(e -> {
-            int amount = Integer.parseInt(field.getText());
+            int amount = Integer.parseInt(withdrawField.getText());
             cashMachine.withdraw(amount);
 
             areaInfo.setText(cashMachine.toString());
@@ -56,13 +57,13 @@ public class CashMachineApp extends Application {
             areaInfo.setText(cashMachine.toString());
         });
 
-        FlowPane flowpane = new FlowPane();
-
-        flowpane.getChildren().add(btnSubmit);
-        flowpane.getChildren().add(btnDeposit);
-        flowpane.getChildren().add(btnWithdraw);
-        flowpane.getChildren().add(btnExit);
-        vbox.getChildren().addAll(field, flowpane, areaInfo);
+        FlowPane idFP = new FlowPane();
+        FlowPane depositFP = new FlowPane();
+        FlowPane withdrawFP = new FlowPane();
+        idFP.getChildren().addAll(btnSubmit,idField);
+        depositFP.getChildren().addAll(btnDeposit,depositField);
+        withdrawFP.getChildren().addAll(btnWithdraw,withdrawField);
+        vbox.getChildren().addAll(idFP,depositFP,withdrawFP, btnExit, areaInfo);
         return vbox;
     }
 

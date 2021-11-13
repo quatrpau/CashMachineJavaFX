@@ -62,7 +62,7 @@ public class CashMachine {
             this.except = null;
         }
         if(accountData != null){
-            sb.append(accountData.toString()).append("\n");
+            sb.append(accountData).append("\n");
         }
         else{
             sb.append("Try account 21, 30, 55, 1000 or 2000 and click submit." + "\n");
