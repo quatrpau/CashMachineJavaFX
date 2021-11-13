@@ -26,14 +26,13 @@ public class CashMachineApp extends Application {
         //split the string on "\n"
         //put each thing on a separate line
         TextArea areaInfo = new TextArea();
-        Button btnSubmit = new Button("Set Account ID");
+        Button btnSubmit = new Button("Login");
         btnSubmit.setOnAction(e -> {
             int id = Integer.parseInt(idField.getText());
             cashMachine.login(id);
 
             areaInfo.setText(cashMachine.toString());
         });
-
         Button btnDeposit = new Button("Deposit");
         btnDeposit.setOnAction(e -> {
             int amount = Integer.parseInt(depositField.getText());
@@ -50,20 +49,26 @@ public class CashMachineApp extends Application {
             areaInfo.setText(cashMachine.toString());
         });
 
-        Button btnExit = new Button("Exit");
+        Button btnExit = new Button("Logout");
         btnExit.setOnAction(e -> {
             cashMachine.exit();
 
             areaInfo.setText(cashMachine.toString());
         });
 
-        FlowPane idFP = new FlowPane();
-        FlowPane depositFP = new FlowPane();
-        FlowPane withdrawFP = new FlowPane();
-        idFP.getChildren().addAll(btnSubmit,idField);
-        depositFP.getChildren().addAll(btnDeposit,depositField);
-        withdrawFP.getChildren().addAll(btnWithdraw,withdrawField);
-        vbox.getChildren().addAll(idFP,depositFP,withdrawFP, btnExit, areaInfo);
+        FlowPane flowpane = new FlowPane();
+        VBox buttons = new VBox();
+        VBox fields = new VBox();
+        btnSubmit.setMaxWidth(Double.MAX_VALUE);
+        btnDeposit.setMaxWidth(Double.MAX_VALUE);
+        btnWithdraw.setMaxWidth(Double.MAX_VALUE);
+        btnExit.setMaxWidth(Double.MAX_VALUE);
+        areaInfo.setPrefSize(600,600);
+        //areaInfo.setPrefSize(Double.MAX_VALUE,Double.MAX_VALUE);
+        buttons.getChildren().addAll(btnSubmit,btnDeposit,btnWithdraw);
+        fields.getChildren().addAll(idField,depositField,withdrawField);
+        flowpane.getChildren().addAll(buttons,fields);
+        vbox.getChildren().addAll(flowpane, btnExit, areaInfo);
         return vbox;
     }
 
