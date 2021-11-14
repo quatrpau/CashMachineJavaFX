@@ -23,25 +23,20 @@ public class CashMachineApp extends Application {
     private Parent createContent() {
         VBox vbox = new VBox(10);
         vbox.setPrefSize(600, 600);
-        //split the string on "\n"
-        //put each thing on a separate line
         TextArea areaInfo = new TextArea();
-        Button btnSubmit = new Button("Login");
-        btnSubmit.setOnAction(e -> {
-            int id = Integer.parseInt(idField.getText());
-            cashMachine.login(id);
-
-            areaInfo.setText(cashMachine.toString());
-        });
+        areaInfo.setEditable(false);
         Button btnDeposit = new Button("Deposit");
+        depositField.setDisable(true);
+        btnDeposit.setDisable(true);
         btnDeposit.setOnAction(e -> {
             int amount = Integer.parseInt(depositField.getText());
             cashMachine.deposit(amount);
 
             areaInfo.setText(cashMachine.toString());
         });
-
         Button btnWithdraw = new Button("Withdraw");
+        withdrawField.setDisable(true);
+        btnWithdraw.setDisable(true);
         btnWithdraw.setOnAction(e -> {
             int amount = Integer.parseInt(withdrawField.getText());
             cashMachine.withdraw(amount);
@@ -50,12 +45,30 @@ public class CashMachineApp extends Application {
         });
 
         Button btnExit = new Button("Logout");
+        btnExit.setDisable(true);
         btnExit.setOnAction(e -> {
             cashMachine.exit();
-
+            depositField.setDisable(true);
+            withdrawField.setDisable(true);
+            btnDeposit.setDisable(true);
+            btnWithdraw.setDisable(true);
+            btnExit.setDisable(true);
             areaInfo.setText(cashMachine.toString());
         });
-
+        Button btnSubmit = new Button("Login");
+        btnSubmit.setOnAction(e -> {
+            int id = Integer.parseInt(idField.getText());
+            cashMachine.login(id);
+            String ex = cashMachine.printException();
+            if(ex.equals("")){
+                depositField.setDisable(false);
+                withdrawField.setDisable(false);
+                btnDeposit.setDisable(false);
+                btnWithdraw.setDisable(false);
+                btnExit.setDisable(false);
+            }
+            areaInfo.setText(ex + cashMachine.toString());
+        });
         FlowPane flowpane = new FlowPane();
         VBox buttons = new VBox();
         VBox fields = new VBox();
@@ -64,7 +77,6 @@ public class CashMachineApp extends Application {
         btnWithdraw.setMaxWidth(Double.MAX_VALUE);
         btnExit.setMaxWidth(Double.MAX_VALUE);
         areaInfo.setPrefSize(600,600);
-        //areaInfo.setPrefSize(Double.MAX_VALUE,Double.MAX_VALUE);
         buttons.getChildren().addAll(btnSubmit,btnDeposit,btnWithdraw);
         fields.getChildren().addAll(idField,depositField,withdrawField);
         flowpane.getChildren().addAll(buttons,fields);

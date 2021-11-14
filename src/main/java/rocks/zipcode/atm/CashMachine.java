@@ -53,6 +53,14 @@ public class CashMachine {
             accountData = null;
         }
     }
+    public String printException() {
+        if(this.except != null){
+            String ex = except.getMessage();
+            this.except = null;
+            return ex + "\n\n";
+        }
+        return "";
+    }
 
     @Override
     public String toString() {
