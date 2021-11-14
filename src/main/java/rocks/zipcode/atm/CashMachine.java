@@ -73,7 +73,7 @@ public class CashMachine {
             sb.append(accountData).append("\n");
         }
         else{
-            sb.append("Try account 21, 30, 55, 1000 or 2000 and click submit." + "\n");
+            sb.append("Login or create a new account." + "\n");
         }
         return sb.toString();
     }

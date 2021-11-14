@@ -1,7 +1,15 @@
 package rocks.zipcode.atm;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import rocks.zipcode.atm.bank.Bank;
@@ -10,10 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.awt.*;
 
 
 /**
@@ -29,15 +34,30 @@ public class CashMachineApp extends Application {
     private Button btnWithdraw = new Button("Withdraw");
     private Button btnLogout = new Button("Logout");
     private Button btnLogin = new Button("Login");
+    private Button btnCreate = new Button("Create Account");
     private TextArea areaInfo = new TextArea();
     private Parent createContent() {
         //init states
+        btnLogin.setDefaultButton(true);
         areaInfo.setEditable(false);
         setVisibility(false);
-        VBox vbox = new VBox(10);
-        vbox.setBackground(new Background(new BackgroundFill(Color.BLACK,new CornerRadii(4),new Insets(0))));
-        vbox.setPrefSize(600, 600);
-        areaInfo.setEditable(false);
+        VBox mainBox = new VBox(10);
+        mainBox.setBackground(new Background(new BackgroundFill(Color.BLACK,new CornerRadii(4),new Insets(0))));
+        mainBox.setPrefSize(600, 600);
+        FlowPane topPane = new FlowPane();
+        VBox buttons = new VBox();
+        VBox fields = new VBox();
+        VBox create = new VBox();
+        btnLogin.setMaxWidth(Double.MAX_VALUE);
+        btnDeposit.setMaxWidth(Double.MAX_VALUE);
+        btnWithdraw.setMaxWidth(Double.MAX_VALUE);
+        btnLogout.setMaxWidth(Double.MAX_VALUE);
+        areaInfo.setPrefSize(600,600);
+        buttons.getChildren().addAll(btnLogin,btnDeposit,btnWithdraw);
+        fields.getChildren().addAll(idField,depositField,withdrawField);
+        create.getChildren().add(btnCreate);
+        topPane.getChildren().addAll(buttons,fields,create);
+        mainBox.getChildren().addAll(topPane, btnLogout, areaInfo);
         //deposit action
         btnDeposit.setOnAction(e -> {
             double amount = Double.parseDouble(depositField.getText());
@@ -69,19 +89,44 @@ public class CashMachineApp extends Application {
             }
             areaInfo.setText(ex + cashMachine.toString());
         });
-        FlowPane flowpane = new FlowPane();
-        VBox buttons = new VBox();
-        VBox fields = new VBox();
-        btnLogin.setMaxWidth(Double.MAX_VALUE);
-        btnDeposit.setMaxWidth(Double.MAX_VALUE);
-        btnWithdraw.setMaxWidth(Double.MAX_VALUE);
-        btnLogout.setMaxWidth(Double.MAX_VALUE);
-        areaInfo.setPrefSize(600,600);
-        buttons.getChildren().addAll(btnLogin,btnDeposit,btnWithdraw);
-        fields.getChildren().addAll(idField,depositField,withdrawField);
-        flowpane.getChildren().addAll(buttons,fields);
-        vbox.getChildren().addAll(flowpane, btnLogout, areaInfo);
-        return vbox;
+        //create action
+        btnCreate.setOnAction(e -> {
+            VBox subMainBox = new VBox();
+            subMainBox.setPrefSize(300,300);
+            subMainBox.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE,new CornerRadii(0),new Insets(0))));
+            Scene subScene = new Scene(subMainBox);
+            Stage subStage = new Stage();
+            subStage.setTitle("Account Creation");
+            subStage.setScene(subScene);
+            VBox subLabels = new VBox(10.25);
+            subLabels.setAlignment(Pos.CENTER_RIGHT);
+            VBox subFields = new VBox();
+            FlowPane subPane = new FlowPane(5,0);
+            Label lid = new Label("ID");
+            Label lname = new Label("Name");
+            Label lemail = new Label("Email");
+            Label lbalance = new Label("Initial Deposit");
+            Label laccount = new Label("Account Type: ");
+            TextField fid = new TextField();
+            TextField fname = new TextField();
+            TextField femail = new TextField();
+            TextField fbalance = new TextField();
+            Button btnSubmit = new Button("Submit");
+            //Radio Button Group
+            ToggleGroup accountType = new ToggleGroup();
+            RadioButton basic = new RadioButton("Basic");
+            RadioButton premium = new RadioButton("Premium");
+            basic.setToggleGroup(accountType);
+            premium.setToggleGroup(accountType);
+            FlowPane radioPane = new FlowPane();
+            radioPane.getChildren().addAll(basic,premium);
+            subLabels.getChildren().addAll(lid,lname,lemail,lbalance,laccount);
+            subFields.getChildren().addAll(fid,fname,femail,fbalance);
+            subPane.getChildren().addAll(subLabels,subFields);
+            subMainBox.getChildren().addAll(subPane,radioPane,btnSubmit);
+            subStage.show();
+        });
+        return mainBox;
     }
 
     @Override
@@ -116,6 +161,8 @@ public class CashMachineApp extends Application {
         btnWithdraw.setDisable(!isLoggedIn);
         btnLogout.setVisible(isLoggedIn);
         btnLogout.setDisable(!isLoggedIn);
+        btnCreate.setVisible(!isLoggedIn);
+        btnCreate.setDisable(isLoggedIn);
         depositField.setVisible(isLoggedIn);
         depositField.setDisable(!isLoggedIn);
         withdrawField.setVisible(isLoggedIn);

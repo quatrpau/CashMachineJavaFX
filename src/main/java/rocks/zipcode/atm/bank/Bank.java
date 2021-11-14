@@ -55,7 +55,7 @@ public class Bank {
         if (ok) {
             return ActionResult.success(account.getAccountData());
         } else {
-            return ActionResult.fail("Withdraw failed: " + "Rounds down".format("$%.2f",amount-.005) + ". Account has: " + "Rounds down".format("$%.2f",account.getBalance()-.005));
+            return ActionResult.fail("Withdraw failed: " + "//Rounds down".format("$%.2f",amount-.005) + ". Account has: " + "//Rounds down".format("$%.2f",account.getBalance()-.005));
         }
     }
 }
