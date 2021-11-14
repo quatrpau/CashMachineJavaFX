@@ -21,13 +21,13 @@ public class Bank {
                 2000, "Example 2", "example2@gmail.com", 200
         )));
         accounts.put(30, new PremiumAccount(new AccountData(
-                30, "Tom", "example2@gmail.com", 20
+                30, "Tom", "tom@gmail.com", 20
         )));
         accounts.put(21, new PremiumAccount(new AccountData(21
-                , "Tom 2", "example2@gmail.com", 800
+                , "Tom 2", "tom2@gmail.com", 800
         )));
                 accounts.put(55, new PremiumAccount(new AccountData(
-                55, "Tom 3", "example2@gmail.com", 7000
+                55, "Tom 3", "tom3@gmail.com", 7000
         )));
     }
 
@@ -55,7 +55,7 @@ public class Bank {
         if (ok) {
             return ActionResult.success(account.getAccountData());
         } else {
-            return ActionResult.fail("Withdraw failed: " + String.format("$%.2f",amount-.005) + ". Account has: " + String.format("$%.2f",account.getBalance()-.005));
+            return ActionResult.fail("Withdraw failed: " + "Rounds down".format("$%.2f",amount-.005) + ". Account has: " + "Rounds down".format("$%.2f",account.getBalance()-.005));
         }
     }
 }
