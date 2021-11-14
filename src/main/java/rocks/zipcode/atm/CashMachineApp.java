@@ -159,7 +159,7 @@ public class CashMachineApp extends Application {
                         throw new Exception();
                     }
                     defaultLogin(newId);
-                    cashMachine.deposit(1000000);
+                    cashMachine.deposit(1000000.00);
                     areaInfo.setText("WOW! As appreciation for signing up with us, we're giving you a little extra!\n\n" + cashMachine.toString());
                     subStage.close();
                 } catch (NullPointerException npe) {
