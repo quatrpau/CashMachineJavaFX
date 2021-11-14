@@ -29,7 +29,7 @@ public class CashMachineApp extends Application {
         depositField.setDisable(true);
         btnDeposit.setDisable(true);
         btnDeposit.setOnAction(e -> {
-            int amount = Integer.parseInt(depositField.getText());
+            double amount = Double.parseDouble(depositField.getText());
             cashMachine.deposit(amount);
 
             areaInfo.setText(cashMachine.toString());
@@ -38,7 +38,7 @@ public class CashMachineApp extends Application {
         withdrawField.setDisable(true);
         btnWithdraw.setDisable(true);
         btnWithdraw.setOnAction(e -> {
-            int amount = Integer.parseInt(withdrawField.getText());
+            double amount = Double.parseDouble(withdrawField.getText());
             cashMachine.withdraw(amount);
 
             areaInfo.setText(cashMachine.toString());
