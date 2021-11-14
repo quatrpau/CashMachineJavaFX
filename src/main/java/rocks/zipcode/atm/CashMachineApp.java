@@ -12,6 +12,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import rocks.zipcode.atm.bank.AccountData;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -112,10 +113,55 @@ public class CashMachineApp extends Application {
             TextField femail = new TextField();
             TextField fbalance = new TextField();
             Button btnSubmit = new Button("Submit");
+            Label lerror = new Label("");
+            lerror.setTextFill(Color.WHITE);
             //Radio Button Group
             ToggleGroup accountType = new ToggleGroup();
             RadioButton basic = new RadioButton("Basic");
+            basic.setSelected(true);
             RadioButton premium = new RadioButton("Premium");
+            basic.setToggleGroup(accountType);
+            premium.setToggleGroup(accountType);
+            btnSubmit.setOnAction(f -> {
+                try {
+                    int newId = Integer.parseInt(fid.getText());
+                    String newName = fname.getText();
+                    String newEmail = femail.getText();
+                    Double newBalance = Double.parseDouble(fbalance.getText());
+                    //checks if newName or newEmail are null
+                    if (newName == null || newEmail == null) {
+                        throw new NullPointerException();
+                    }
+                    //checks if ID fits constraints
+                    if (0 >= newId || newId > 2000) {
+                        throw new Exception();
+                    }
+                    //checks if ID is already in use
+                    cashMachine.login(newId);
+                    if (cashMachine.printException().equals("")) {
+                        throw new Exception();
+                    }
+                    //how does this work for basic accounts?
+                    if (newBalance < -100) {
+                        throw new Exception();
+                    }
+                    RadioButton selection = (RadioButton) accountType.getSelectedToggle();
+                    if (selection.getText().equals("Basic")) {
+                        cashMachine.addBasicAccount(newId, newName, newEmail, newBalance);
+                    } else if (selection.getText().equals("Premium")) {
+                        cashMachine.addPremiumAccount(newId, newName, newEmail, newBalance);
+                    } else {
+                        throw new Exception();
+                    }
+                    defaultLogin(newId);
+                    subStage.close();
+                } catch(NullPointerException npe) {
+                    npe.printStackTrace();
+                    System.out.println("d");
+                } catch(Exception exception) {
+                    exception.printStackTrace();
+                }
+            });
             basic.setToggleGroup(accountType);
             premium.setToggleGroup(accountType);
             FlowPane radioPane = new FlowPane();
@@ -123,7 +169,7 @@ public class CashMachineApp extends Application {
             subLabels.getChildren().addAll(lid,lname,lemail,lbalance,laccount);
             subFields.getChildren().addAll(fid,fname,femail,fbalance);
             subPane.getChildren().addAll(subLabels,subFields);
-            subMainBox.getChildren().addAll(subPane,radioPane,btnSubmit);
+            subMainBox.getChildren().addAll(subPane,radioPane,btnSubmit,lerror);
             subStage.show();
         });
         return mainBox;

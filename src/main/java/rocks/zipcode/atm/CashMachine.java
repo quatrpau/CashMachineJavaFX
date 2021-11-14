@@ -2,6 +2,8 @@ package rocks.zipcode.atm;
 
 import rocks.zipcode.atm.bank.AccountData;
 import rocks.zipcode.atm.bank.Bank;
+import rocks.zipcode.atm.bank.BasicAccount;
+import rocks.zipcode.atm.bank.PremiumAccount;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -61,7 +63,12 @@ public class CashMachine {
         }
         return "";
     }
-
+    public void addPremiumAccount(int id, String name, String email, double balance){
+        bank.addAccount(id, new PremiumAccount(bank.assembleData(id,name,email,balance)));
+    }
+    public void addBasicAccount(int id, String name, String email, double balance){
+        bank.addAccount(id, new BasicAccount(bank.assembleData(id,name,email,balance)));
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
