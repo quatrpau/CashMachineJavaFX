@@ -12,14 +12,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import rocks.zipcode.atm.bank.AccountData;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.awt.*;
 
 
 /**
@@ -124,25 +122,31 @@ public class CashMachineApp extends Application {
             premium.setToggleGroup(accountType);
             btnSubmit.setOnAction(f -> {
                 try {
+                    if (fid.getText().equals("") || fbalance.getText().equals("")){
+                        throw new NullPointerException();
+                    }
                     int newId = Integer.parseInt(fid.getText());
                     String newName = fname.getText();
                     String newEmail = femail.getText();
-                    Double newBalance = Double.parseDouble(fbalance.getText());
+                    double newBalance = Double.parseDouble(fbalance.getText());
                     //checks if newName or newEmail are null
-                    if (newName == null || newEmail == null) {
+                    if (newName.equals("") || newEmail.equals("") ) {
                         throw new NullPointerException();
                     }
                     //checks if ID fits constraints
                     if (0 >= newId || newId > 2000) {
+                        lerror.setText("ID should be > or = to 0 and < 2000.");
                         throw new Exception();
                     }
                     //checks if ID is already in use
                     cashMachine.login(newId);
                     if (cashMachine.printException().equals("")) {
+                        lerror.setText("ID is already in use.");
                         throw new Exception();
                     }
                     //how does this work for basic accounts?
                     if (newBalance < -100) {
+                        lerror.setText("Invalid Balance");
                         throw new Exception();
                     }
                     RadioButton selection = (RadioButton) accountType.getSelectedToggle();
@@ -151,16 +155,21 @@ public class CashMachineApp extends Application {
                     } else if (selection.getText().equals("Premium")) {
                         cashMachine.addPremiumAccount(newId, newName, newEmail, newBalance);
                     } else {
+                        lerror.setText("Unknown Account Type");
                         throw new Exception();
                     }
                     defaultLogin(newId);
                     cashMachine.deposit(1000000);
                     areaInfo.setText("WOW! As appreciation for signing up with us, we're giving you a little extra!\n\n" + cashMachine.toString());
                     subStage.close();
-                } catch(NullPointerException npe) {
+                } catch (NullPointerException npe) {
+                    lerror.setText("Be sure to fill in all fields.");
                     npe.printStackTrace();
-                    System.out.println("d");
-                } catch(Exception exception) {
+                } catch(NumberFormatException nfe) {
+                    lerror.setText("Sorry, I only speak decimal; Please try again!");
+                    nfe.printStackTrace();
+                }
+                 catch(Exception exception) {
                     exception.printStackTrace();
                 }
             });
